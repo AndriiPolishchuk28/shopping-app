@@ -10,19 +10,17 @@ import {
 import { IProduct } from "../../../redux/products/interface";
 import scss from "./ProductItem.module.scss";
 
-const ProductItem: FC<IProduct> = ({ title, image }) => {
+const ProductItem: FC<IProduct> = ({ title, image, price }) => {
   return (
     <li className={scss.item}>
-      <Card>
-        <CardMedia
-          className={scss.image}
-          sx={{ height: 200 }}
-          image={image}
-          title="green iguana"
-        />
+      <Card className={scss.card}>
+        <img className={scss.image} src={image} alt="product" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {title}
+          </Typography>
+          <Typography gutterBottom variant="h5" component="div">
+            {price}
           </Typography>
         </CardContent>
         <CardActions>

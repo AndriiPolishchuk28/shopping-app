@@ -8,7 +8,9 @@ import {
 } from "@mui/material";
 import { Category } from "../../constants";
 import { useAppDispatch } from "../../hooks";
-import { sortByCategory, sortByOrder } from "../../redux/products/operations";
+import { sortByCategory } from "../../redux/products/operations";
+import { sortByOrder } from "../../redux/products/productsSlice";
+import scss from "./Filter.module.scss";
 import { Order } from "../../constants/constants";
 
 const Filter: FC = () => {
@@ -37,18 +39,15 @@ const Filter: FC = () => {
   }, [order, dispatch]);
 
   return (
-    <>
-      <FormControl sx={{ m: 1, minWidth: 80 }}>
-        <InputLabel id="demo-simple-select-autowidth-label">
-          Category
-        </InputLabel>
+    <div className={scss.filter_wrapper}>
+      <FormControl sx={{ m: 1, minWidth: 200 }}>
+        <InputLabel id="category">Category</InputLabel>
         <Select
-          labelId="demo-simple-select-autowidth-label"
-          id="demo-simple-select-autowidth"
+          labelId="category"
           value={category}
           onChange={handleCategory}
           autoWidth
-          label="category"
+          label="Category"
         >
           {Object.values(Category).map((cat) => (
             <MenuItem key={cat} value={cat}>
@@ -56,19 +55,21 @@ const Filter: FC = () => {
             </MenuItem>
           ))}
         </Select>
+      </FormControl>
+      <FormControl sx={{ m: 1, minWidth: 200 }}>
+        <InputLabel id="order">Order</InputLabel>
         <Select
-          labelId="demo-simple-select-autowidth-label"
-          id="demo-simple-select-autowidth"
+          labelId="order"
           value={order}
           onChange={handleOrder}
           autoWidth
-          label="Age"
+          label="Order"
         >
-          <MenuItem value="desc">desc</MenuItem>
-          <MenuItem value="asc">asc</MenuItem>
+          <MenuItem value="desc">Desc</MenuItem>
+          <MenuItem value="asc">Asc</MenuItem>
         </Select>
       </FormControl>
-    </>
+    </div>
   );
 };
 
