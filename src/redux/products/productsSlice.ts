@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, isAnyOf } from "@reduxjs/toolkit";
 import { getProducts, sortByCategory } from "./operations";
-import { IProduct } from "./interface";
+import { IFilter, IProduct } from "./interface";
 
 export interface ProductsState {
   products: IProduct[];
@@ -8,6 +8,7 @@ export interface ProductsState {
   error: string | null;
   order: string;
   cart: IProduct[];
+  filter: IFilter;
 }
 
 const initialState: ProductsState = {
@@ -16,6 +17,10 @@ const initialState: ProductsState = {
   error: null,
   order: "",
   cart: [],
+  filter: {
+    category: "",
+    order: "",
+  },
 };
 
 const findProduct = (state: ProductsState, id: number) => {
@@ -60,6 +65,14 @@ const productsSlice = createSlice({
         product.quantity -= 1;
       }
     },
+    setFilter(state, action: PayloadAction<{ name: string; value: string }>) {
+      const { name, value } = action.payload;
+      state.filter[name] = value;
+    },
+    clearFilter(state) {
+      state.filter.category = "";
+      state.filter.order = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -94,6 +107,8 @@ export const {
   deleteProduct,
   increaseQuantity,
   decreaseQuantity,
+  setFilter,
+  clearFilter,
 } = productsSlice.actions;
 
 export const productsReducer = productsSlice.reducer;

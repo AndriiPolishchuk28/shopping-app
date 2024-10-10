@@ -6,3 +6,9 @@ export interface IProduct {
   price: number;
   quantity: number;
 }
+
+export interface IFilter {
+  [key: string]: string;
+  category: string;
+  order: string;
+}

@@ -1,29 +1,43 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import {
   InputLabel,
   FormControl,
   Select,
   MenuItem,
   SelectChangeEvent,
+  Button,
 } from "@mui/material";
 import { Category } from "../../constants";
 import { useAppDispatch } from "../../hooks";
-import { sortByCategory } from "../../redux/products/operations";
-import { sortByOrder } from "../../redux/products/productsSlice";
+import { getProducts, sortByCategory } from "../../redux/products/operations";
+import {
+  clearFilter,
+  setFilter,
+  sortByOrder,
+} from "../../redux/products/productsSlice";
 import scss from "./Filter.module.scss";
 import { Order } from "../../constants/constants";
+import { useSelector } from "react-redux";
+import { selectCategory, selectOrder } from "../../redux/products/selectors";
 
 const Filter: FC = () => {
-  const [category, setCategory] = useState<Category | "">("");
-  const [order, setOrder] = useState<Order | "">("");
   const dispatch = useAppDispatch();
+  const category = useSelector(selectCategory) as Category | "";
+  const order = useSelector(selectOrder) as Order | "";
 
   const handleCategory = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as Category);
+    dispatch(
+      setFilter({ name: "category", value: event.target.value as Category })
+    );
   };
 
   const handleOrder = (event: SelectChangeEvent) => {
-    setOrder(event.target.value as Order);
+    dispatch(setFilter({ name: "order", value: event.target.value as Order }));
+  };
+
+  const handleClearFilters = () => {
+    dispatch(clearFilter());
+    dispatch(getProducts());
   };
 
   useEffect(() => {
@@ -69,6 +83,9 @@ const Filter: FC = () => {
           <MenuItem value="asc">Asc</MenuItem>
         </Select>
       </FormControl>
+      <Button onClick={handleClearFilters} variant="outlined">
+        Clear Filters
+      </Button>
     </div>
   );
 };
