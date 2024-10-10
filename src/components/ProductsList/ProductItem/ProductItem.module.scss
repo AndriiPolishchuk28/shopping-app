@@ -8,8 +8,34 @@
 }
 
 .card {
-  height: 420px;
+  height: 440px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.product_quantity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.quantity {
+  margin: 0 10px;
+  font-size: 18px;
+}
+
+.btn_wrapper {
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 20px;
 }
