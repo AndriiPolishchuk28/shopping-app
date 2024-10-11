@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useRef } from "react";
 import {
   InputLabel,
   FormControl,
@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Category } from "../../constants";
 import { useAppDispatch } from "../../hooks";
-import { getProducts, sortByCategory } from "../../redux/products/operations";
+import { sortByCategory } from "../../redux/products/operations";
 import {
   clearFilter,
   setFilter,
@@ -24,11 +24,13 @@ const Filter: FC = () => {
   const dispatch = useAppDispatch();
   const category = useSelector(selectCategory) as Category | "";
   const order = useSelector(selectOrder) as Order | "";
+  const prevCategoryRef = useRef<Category | "">("");
+  const prevOrderRef = useRef<Order | "">("");
 
   const handleCategory = (event: SelectChangeEvent) => {
-    dispatch(
-      setFilter({ name: "category", value: event.target.value as Category })
-    );
+    const selected = event.target.value as Category;
+    dispatch(setFilter({ name: "category", value: selected }));
+    prevCategoryRef.current = selected;
   };
 
   const handleOrder = (event: SelectChangeEvent) => {
@@ -37,17 +39,22 @@ const Filter: FC = () => {
 
   const handleClearFilters = () => {
     dispatch(clearFilter());
-    dispatch(getProducts());
   };
 
   useEffect(() => {
-    if (category) {
-      dispatch(sortByCategory(category));
+    if (category && category === prevCategoryRef.current) {
+      prevCategoryRef.current = category;
+      dispatch(sortByCategory(category)).then(() => {
+        if (order) {
+          dispatch(sortByOrder(order));
+        }
+      });
     }
-  }, [category, dispatch]);
+  }, [category, dispatch, order]);
 
   useEffect(() => {
-    if (order) {
+    if (order && order !== prevOrderRef.current) {
+      prevOrderRef.current = order;
       dispatch(sortByOrder(order));
     }
   }, [order, dispatch]);

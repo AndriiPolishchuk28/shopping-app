@@ -4,6 +4,7 @@ import { IFilter, IProduct } from "./interface";
 
 export interface ProductsState {
   products: IProduct[];
+  productsCategory: IProduct[];
   loading: boolean;
   error: string | null;
   order: string;
@@ -13,6 +14,7 @@ export interface ProductsState {
 
 const initialState: ProductsState = {
   products: [],
+  productsCategory: [],
   loading: false,
   error: null,
   order: "",
@@ -32,7 +34,10 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     sortByOrder(state, action: PayloadAction<"desc" | "asc">) {
-      state.products = state.products.sort((a: IProduct, b: IProduct) => {
+      const sortArray = state.productsCategory.length
+        ? state.productsCategory
+        : state.products;
+      state.productsCategory = sortArray.sort((a: IProduct, b: IProduct) => {
         if (action.payload === "desc") {
           return b.price - a.price;
         } else {
@@ -72,6 +77,7 @@ const productsSlice = createSlice({
     clearFilter(state) {
       state.filter.category = "";
       state.filter.order = "";
+      state.productsCategory = [];
     },
   },
   extraReducers: (builder) => {
@@ -81,7 +87,7 @@ const productsSlice = createSlice({
         state.loading = false;
       })
       .addCase(sortByCategory.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.productsCategory = action.payload;
         state.loading = false;
       })
       .addMatcher(

@@ -3,13 +3,17 @@ import { useSelector } from "react-redux";
 import {
   selectCartLoading,
   selectProducts,
+  selectProductsCategory,
 } from "../../redux/products/selectors";
 import ProductItem from "./ProductItem";
 import scss from "./ProductList.module.scss";
 import Loader from "../Loader";
 
 const ProductsList: FC = () => {
-  const products = useSelector(selectProducts);
+  const productsCategory = useSelector(selectProductsCategory);
+  const productsAll = useSelector(selectProducts);
+  const products = productsCategory.length > 0 ? productsCategory : productsAll;
+
   const loading = useSelector(selectCartLoading);
 
   return (
